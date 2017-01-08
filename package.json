@@ -1,0 +1,26 @@
+{
+  "name": "simpletimer",
+  "version": "1.0.0",
+  "description": "simple timer",
+  "main": "index.js",
+  "scripts": {
+    "serve": "katatema serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miyamonz/simpletimer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miyamonz/simpletimer/issues"
+  },
+  "homepage": "https://github.com/miyamonz/simpletimer#readme",
+  "devDependencies": {
+    "katatema": "^0.1.7"
+  },
+  "dependencies": {
+    "moment": "^2.17.1"
+  }
+}

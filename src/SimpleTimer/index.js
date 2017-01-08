@@ -48,15 +48,23 @@ export default class extends React.Component {
                         <td>{t.start.format("HH:mm")}</td>
                         <td>{t.end.format("HH:mm")}</td>
                         <td>
-                            <div style={{border: "solid 1px"}}>
-                        <div style={{
-                            background: "#eae",
-                            position: "relative",
-                            top: 0,
-                            left: t.start.diff(moment(), "m"),
-                            width: t.time
-                        }}> {"_"} </div>
+                        <div style={{border: "1px",position:"absolute"}}>
+                            <div style={{
+                                background: "#eae",
+                                position: "relative",
+                                top: 0,
+                                left: t.start.diff(moment(), "m"),
+                                width: t.time
+                            }}> {"_"} </div>
                             </div>
+                            <div style= {{
+                                background: "#f00",
+                                position: "relative",
+                                top: "-5px",
+                                left: 0,
+                                height: "100%",
+                                width: "2",
+                            }} >{"　"}</div>
                         </td>
                         </tr>
                 ))}

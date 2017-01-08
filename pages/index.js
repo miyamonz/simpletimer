@@ -4,6 +4,12 @@ import SimpleTimer from "../src/SimpleTimer"
 let tasks = [
     {name: "test ", time: 30},
     {name: "test ", time: 45},
+    {name: "test ", time: 45},
+    {name: "test ", time: 45},
+    {name: "test ", time: 45},
+    {name: "test ", time: 45},
+    {name: "test ", time: 45},
+    {name: "test ", time: 45},
 ]
 
 

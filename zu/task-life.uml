@@ -1,0 +1,7 @@
+@startuml
+[*] --> todo
+todo --> next
+next --> doing
+doing --> done
+doing --> next : cancel
+@enduml

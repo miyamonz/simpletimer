@@ -1,0 +1,7 @@
+@startuml
+state stop
+stop --> doing :start
+doing --> stop : done
+doing -right-> cancel
+cancel -up-> stop
+@enduml

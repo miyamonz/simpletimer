@@ -2,42 +2,67 @@ import React from "react"
 import store from "store"
 import moment from "moment"
 import Clock from "./clock.js"
+import InputTime from "./inputTime.js"
 
 export default class extends React.Component {
-  constructor(props) {
-    super(props)
-  }
-  render() {
-
-    let tasks = [];
-    this.props.tasks.reduce((prev,t,i) => {
-      t.start = (i === 0) ? moment() : prev.end;
-      t.end   = moment(t.start).add(t.time, 'm')
-      tasks.push(
-        <tr>
-          <td><input type="text" value={t.name}/></td>
-          <td>{t.time}</td>
-          <td>{t.start.format("HH:mm")}</td>
-          <td>{t.end.format("HH:mm")}</td>
-          </tr>
-      )
-      return t;
-    }, moment())
-    return (
-      <div>
-        <Clock />
-
-        <table>
-        <tr>
-        <td>task</td>
-        <td>timer</td>
-        <td>start</td>
-        <td>end</td>
-        </tr>
-        {tasks}
-
-        </table>
-        </div>
-    )
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            tasks: props.tasks
+        }
+        this.tick()
+        this.tick = this.tick.bind(this)
+    }
+    tick(){
+        let calcTasks = Object.assign([],this.props.tasks);
+        calcTasks.reduce((prev,t,i) => {
+            t.start = (i === 0) ? moment() : prev.end;
+            t.end   = moment(t.start).add(t.time, 'm')
+            return t;
+        }, moment())
+        this.setState({
+            tasks: calcTasks
+        })
+    }
+    render() {
+        return (
+            <div>
+                <Clock onTick={this.tick}/>
+                <table>
+                <tbody>
+                <tr>
+                <td>task</td>
+                <td>time</td>
+                <td>start</td>
+                <td>end</td>
+                <td>graph</td>
+                </tr>
+                {this.state.tasks.map( (t,i) => (
+                    <tr>
+                        <td>{t.name}</td>
+                        <td>
+                            <InputTime number={t.time} 
+                                onChange={ e => {t.time=e; this.tick(); }}
+                            />
+                        </td>
+                        <td>{t.start.format("HH:mm")}</td>
+                        <td>{t.end.format("HH:mm")}</td>
+                        <td>
+                            <div style={{border: "solid 1px"}}>
+                        <div style={{
+                            background: "#eae",
+                            position: "relative",
+                            top: 0,
+                            left: t.start.diff(moment(), "m"),
+                            width: t.time
+                        }}> {"_"} </div>
+                            </div>
+                        </td>
+                        </tr>
+                ))}
+                </tbody>
+                </table>
+                </div>
+        )
+    }
 }

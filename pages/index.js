@@ -1,5 +1,5 @@
 import React from "react"
-import SimpleTimer from "./SimpleTimer"
+import SimpleTimer from "../src/SimpleTimer"
 
 let tasks = [
     {name: "test ", time: 30},

@@ -13,12 +13,18 @@ export default class extends React.Component  {
             number: e.target.value
         })
     }
+    onKeyDown(e){
+        if(e.key === "Enter") {
+            if(this.props.onChange)this.props.onChange(e.target.value)
+        }
+    }
     
     render(){
         return (
             <input type="number" 
                 value={this.state.number}
-                onChange={(e) => this.onChange(e)} />
+                onChange={(e) => this.onChange(e)}
+            onKeyDown={(e) =>this.onKeyDown(Object.assign({}, e))} />
         )
     }
 }

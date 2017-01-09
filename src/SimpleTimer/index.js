@@ -3,7 +3,6 @@ import store        from "store"
 import moment       from "moment"
 import Clock        from "./clock.js"
 import InputTime    from "./inputTime.js"
-import TaskRenderer from "../TaskRenderer.js"
 
 export default class extends React.Component {
     constructor(props) {
@@ -26,6 +25,12 @@ export default class extends React.Component {
     }
     render() {
         let tasks = this.state.tasks;
+        let TaskName  = ({task}) => <span>{task.name}</span>;
+        let TaskEst   = ({time}) => <span>{time.format("HH:mm")}</span>;
+        let change = (n,t) => {
+            t.time = n
+            this.tick();
+        }
         return (
             <div>
                 <Clock />
@@ -38,10 +43,14 @@ export default class extends React.Component {
                     <td>end</td>
                     <td>graph</td>
                 </tr>
-                {tasks.map( t => <TaskRenderer task={t} onChange={(num)=>{
-                    t.time = num
-                    this.tick() 
-                }} /> )}
+                {tasks.map( (t,i) => (
+                    <tr>
+                        <td><TaskName task={t} /></td>
+                        <td><InputTime number={t.time} onChange={n => change(n,t)} /></td>
+                        <td><TaskEst  time={t.startEst} /></td>
+                        <td><TaskEst  time={t.endEst} /></td>
+                    </tr>
+                ))}
                 </tbody>
                 </table>
                 </div>

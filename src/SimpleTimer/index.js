@@ -3,52 +3,81 @@ import store        from "store"
 import moment       from "moment"
 import Clock        from "./clock.js"
 import InputTime    from "./inputTime.js"
+import Task         from "../Task.js"
 
 export default class extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tasks: props.tasks
+            tasks: []
         }
-        this.tick()
-        this.tick = this.tick.bind(this)
     }
-    tick(){
-        let calc = Object.assign([], this.state.tasks);
-        calc.reduce((prev,next,i) => {
+    componentDidMount(){
+        this.load()
+    }
+    calc(){
+        let result = Object.assign([], this.state.tasks);
+        result.reduce((prev,next,i) => {
             next.estimate(prev)
             return next
         }, null)
+        return result;
+    }
+    calcSet(){
         this.setState({
-            tasks: calc
+            tasks: this.calc()
+        })
+    }
+
+    save(){
+        store.set("tasks", this.state.tasks)
+    }
+    load(){
+        this.setState({
+            tasks: store.get("tasks").map(t => {
+                let n = new Task(t)
+                n.setReload(() => this.calcSet())
+                return n
+            })
         })
     }
     render() {
+        this.calc()
         let tasks = this.state.tasks;
+        console.log(tasks)
         let TaskName  = ({task}) => <span>{task.name}</span>;
-        let TaskEst   = ({time}) => <span>{time.format("HH:mm")}</span>;
-        let change = (n,t) => {
-            t.time = n
-            this.tick();
-        }
+        let TaskTime  = ({time}) => <span>{(time) ? time.format("HH:mm") : ""}</span>;
         return (
             <div>
                 <Clock />
+                <p>次のタスク：
+                <button>実行</button>
+                </p>
+                <p>
+                    <button onClick={() => this.save()}>save</button>
+                    <button onClick={() => this.load()}>load</button>
+                </p>
                 <table>
                 <tbody>
                 <tr>
                     <td>task</td>
                     <td>time</td>
-                    <td>start</td>
-                    <td>end</td>
+                    <td>実際</td>
+                    <td></td>
+                    <td>予測</td>
+                    <td></td>
                     <td>graph</td>
                 </tr>
                 {tasks.map( (t,i) => (
                     <tr>
                         <td><TaskName task={t} /></td>
-                        <td><InputTime number={t.time} onChange={n => change(n,t)} /></td>
-                        <td><TaskEst  time={t.startEst} /></td>
-                        <td><TaskEst  time={t.endEst} /></td>
+                        <td><InputTime number={t.time} task={t} />{"min"}</td>
+                        <td><TaskTime time={t.startTime} /></td>
+                        <td><TaskTime time={t.stopTime} /></td>
+                        <td><TaskTime time={t.startEst} /></td>
+                        <td><TaskTime time={t.stopEst} /></td>
+                        <td> {t.button()} </td>
+                        <td> {t.graph()} </td>
                     </tr>
                 ))}
                 </tbody>

@@ -8,10 +8,13 @@ export default class extends React.Component  {
         }
     }
     onChange(e){
-        if(this.props.onChange)this.props.onChange(e.target.value)
+        // if(this.props.onChange)this.props.onChange(e.target.value)
         this.setState({
             number: e.target.value
         })
+
+        this.props.task.time = e.target.value;
+        this.props.task.callback()
     }
     onKeyDown(e){
         if(e.key === "Enter") {
@@ -21,7 +24,7 @@ export default class extends React.Component  {
     
     render(){
         return (
-            <input type="number" 
+            <input type="number"style={{width:50}}
                 value={this.state.number}
                 onChange={(e) => this.onChange(e)}
             onKeyDown={(e) =>this.onKeyDown(Object.assign({}, e))} />
